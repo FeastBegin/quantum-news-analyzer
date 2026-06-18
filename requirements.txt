@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+qiskit
+qiskit-aer
+qiskit-machine-learning
+google-generativeai
+pydantic
+python-dotenv

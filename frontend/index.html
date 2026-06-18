@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum News Analyzer</title>
+    <meta name="description" content="Analyze Quantum Computing news for hype vs reality using Qiskit and AI.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-gradients">
+        <div class="gradient-blob shape-1"></div>
+        <div class="gradient-blob shape-2"></div>
+        <div class="gradient-blob shape-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1 class="glow-text">Quantum News Analyzer</h1>
+            <p class="subtitle">AI & Qiskit-powered tool to separate hype from reality in Quantum Computing</p>
+        </header>
+
+        <section class="input-section glass-panel">
+            <label for="newsInput">Enter QC News, Claim, or Article Text:</label>
+            <textarea id="newsInput" placeholder="e.g. 'New quantum computer breaks all encryption tomorrow...'"></textarea>
+            <button id="analyzeBtn" class="btn-primary">
+                <span class="btn-text">Analyze with VQC</span>
+                <div class="spinner hidden"></div>
+            </button>
+        </section>
+
+        <section id="resultsSection" class="results-section glass-panel hidden">
+            <h2>Analysis Results</h2>
+            <div id="mockWarning" class="warning-banner hidden">
+                ⚠️ Running in Mock Mode (No API Key provided)
+            </div>
+
+            <div class="gauge-container">
+                <div class="gauge-header">
+                    <span>Reality</span>
+                    <span>Hype</span>
+                </div>
+                <div class="gauge-bar">
+                    <div id="hypeFill" class="gauge-fill"></div>
+                </div>
+                <div class="score-display">
+                    Score: <span id="hypeScoreText">0%</span>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Technical Realism</h3>
+                    <div class="feature-value" id="valRealism">0.0</div>
+                </div>
+                <div class="feature-card">
+                    <h3>Timeline Proximity</h3>
+                    <div class="feature-value" id="valTimeline">0.0</div>
+                </div>
+                <div class="feature-card">
+                    <h3>Sentiment Exaggeration</h3>
+                    <div class="feature-value" id="valExaggeration">0.0</div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h3>LLM Verdict</h3>
+                <p id="summaryText">Waiting for analysis...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
