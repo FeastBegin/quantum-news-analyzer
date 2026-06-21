@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const valTimeline = document.getElementById('valTimeline');
     const valExaggeration = document.getElementById('valExaggeration');
     const summaryText = document.getElementById('summaryText');
+    const keywordsContainer = document.getElementById('keywordsContainer');
+    
+    // News elements
+    const newsLoading = document.getElementById('newsLoading');
+    const newsContainer = document.getElementById('newsContainer');
 
     analyzeBtn.addEventListener('click', async () => {
         const text = newsInput.value.trim();
@@ -88,6 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set summary
         summaryText.textContent = data.summary;
         
+        // Set keywords
+        keywordsContainer.innerHTML = '';
+        if (data.keywords && data.keywords.length > 0) {
+            data.keywords.forEach(kw => {
+                const span = document.createElement('span');
+                span.className = 'keyword-tag';
+                span.textContent = kw;
+                keywordsContainer.appendChild(span);
+            });
+        }
+        
         // Scroll to results
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -107,4 +123,56 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         window.requestAnimationFrame(step);
     }
+
+    async function fetchRecentNews() {
+        try {
+            const response = await fetch('/api/news');
+            if (!response.ok) throw new Error('Failed to fetch news');
+            
+            const newsItems = await response.json();
+            newsLoading.classList.add('hidden');
+            
+            if (newsItems.length === 0) {
+                newsContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No recent news found.</p>';
+                return;
+            }
+
+            newsItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                
+                let hypeClass = 'hype-low';
+                let hypeText = 'Low Hype';
+                if (item.hype_score > 0.7) {
+                    hypeClass = 'hype-high';
+                    hypeText = 'High Hype';
+                } else if (item.hype_score > 0.4) {
+                    hypeClass = 'hype-med';
+                    hypeText = 'Med Hype';
+                }
+
+                // Format keywords
+                const kws = item.keywords.map(kw => `<span class="keyword-tag">${kw}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="news-meta">
+                        <span>${new Date(item.date).toLocaleDateString()}</span>
+                        <span class="news-hype ${hypeClass}">${hypeText} (${(item.hype_score*100).toFixed(0)}%)</span>
+                    </div>
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+                    <p class="news-summary">${item.summary}</p>
+                    <div class="keywords-container" style="margin-bottom: 0;">
+                        ${kws}
+                    </div>
+                `;
+                newsContainer.appendChild(card);
+            });
+        } catch (error) {
+            console.error('Error fetching news:', error);
+            newsLoading.textContent = 'Failed to load recent news.';
+        }
+    }
+
+    // Initial fetch
+    fetchRecentNews();
 });

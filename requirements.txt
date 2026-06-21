@@ -6,3 +6,6 @@ qiskit-machine-learning
 google-generativeai
 pydantic
 python-dotenv
+requests
+beautifulsoup4
+feedparser

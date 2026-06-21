@@ -24,8 +24,8 @@
         </header>
 
         <section class="input-section glass-panel">
-            <label for="newsInput">Enter QC News, Claim, or Article Text:</label>
-            <textarea id="newsInput" placeholder="e.g. 'New quantum computer breaks all encryption tomorrow...'"></textarea>
+            <label for="newsInput">Enter QC News, Claim, Article Text, or URL:</label>
+            <textarea id="newsInput" placeholder="e.g. 'https://example.com/quantum-news' or 'New quantum computer breaks all encryption tomorrow...'"></textarea>
             <button id="analyzeBtn" class="btn-primary">
                 <span class="btn-text">Analyze with VQC</span>
                 <div class="spinner hidden"></div>
@@ -67,8 +67,23 @@
             </div>
 
             <div class="summary-box">
+                <h3>Keywords</h3>
+                <div id="keywordsContainer" class="keywords-container">
+                    <!-- Keywords will be injected here -->
+                </div>
+            </div>
+
+            <div class="summary-box">
                 <h3>LLM Verdict</h3>
                 <p id="summaryText">Waiting for analysis...</p>
+            </div>
+        </section>
+
+        <section id="recentNewsSection" class="news-section glass-panel">
+            <h2>Recent Quantum News</h2>
+            <div id="newsLoading" class="news-loading">Fetching latest news... <div class="spinner inline-spinner"></div></div>
+            <div id="newsContainer" class="news-container">
+                <!-- News items will be injected here -->
             </div>
         </section>
     </main>

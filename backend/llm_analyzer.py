@@ -17,11 +17,12 @@ class LLMAnalyzer:
             self.is_mock = True
             print("WARNING: GEMINI_API_KEY not found. Using Mock LLM Analyzer.")
 
-    def analyze_text(self, text: str) -> tuple[list[float], str]:
+    def analyze_text(self, text: str) -> tuple[list[float], str, list[str]]:
         """
         Analyzes the text and returns:
         - features: [Technical Realism, Timeline Proximity, Sentiment Exaggeration]
         - summary: A generated paragraph explaining the verdict.
+        - keywords: A list of 3-5 relevant keywords extracted from the text.
         """
         if self.is_mock:
             # Simple mock logic based on keyword detection
@@ -45,7 +46,7 @@ class LLMAnalyzer:
             else:
                 summary += "It presents a relatively grounded and realistic view of current technology."
                 
-            return [realism, timeline, exaggeration], summary
+            return [realism, timeline, exaggeration], summary, ["mock", "quantum", "analysis"]
 
         # Real LLM call
         prompt = f"""
@@ -63,7 +64,8 @@ class LLMAnalyzer:
             "realism": <float>,
             "timeline": <float>,
             "exaggeration": <float>,
-            "summary": "<A 2-3 sentence paragraph explaining your reasoning and the final verdict on whether this is hype or reality>"
+            "summary": "<A 2-3 sentence paragraph explaining your reasoning and the final verdict on whether this is hype or reality>",
+            "keywords": ["<keyword1>", "<keyword2>", "<keyword3>"]
         }}
         """
         
@@ -82,10 +84,11 @@ class LLMAnalyzer:
                     float(data.get("exaggeration", 0.5))
                 ]
                 summary = data.get("summary", "Analysis completed.")
-                return features, summary
+                keywords = data.get("keywords", [])
+                return features, summary, keywords
             else:
-                return [0.5, 0.5, 0.5], "Failed to parse LLM response format."
+                return [0.5, 0.5, 0.5], "Failed to parse LLM response format.", []
                 
         except Exception as e:
             print(f"Error calling LLM: {e}")
-            return [0.5, 0.5, 0.5], f"Error during analysis: {e}"
+            return [0.5, 0.5, 0.5], f"Error during analysis: {e}", []
